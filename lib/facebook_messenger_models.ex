@@ -13,19 +13,34 @@ defmodule FacebookMessenger.Attachment do
   }
 end
 
+defmodule FacebookMessenger.QuickReply do
+  @moduledoc """
+  Messenger quick reply structure
+  """
+  @derive [Poison.Encoder]
+  defstruct [:content_type, :title, :payload]
+
+  @type t :: %FacebookMessenger.QuickReply{
+    content_type: String.t,
+    title: String.t,
+    payload: %{}
+  }
+end
+
 defmodule FacebookMessenger.Message do
   @moduledoc """
   Facebook message structure
   """
 
   @derive [Poison.Encoder]
-  defstruct [:mid, :seq, :text, :attachments]
+  defstruct [:mid, :seq, :text, :attachments, :quick_replies]
 
   @type t :: %FacebookMessenger.Message{
     mid: String.t,
     seq: integer,
     text: String.t,
-    attachments: [FacebookMessenger.Attachment.t]
+    attachments: [FacebookMessenger.Attachment.t],
+    quick_replies: [FacebookMessenger.Quickreply.t]
   }
 end
 
@@ -163,7 +178,8 @@ defmodule FacebookMessenger.Response do
       "sender": %FacebookMessenger.User{},
       "recipient": %FacebookMessenger.User{},
       "message": %FacebookMessenger.Message{
-        "attachments": [%FacebookMessenger.Attachment{}]
+        "attachments": [%FacebookMessenger.Attachment{}],
+        "quick_replies": [%FacebookMessenger.QuickReply{}]
       },
       "optin": %FacebookMessenger.Optin{},
       "postback": %FacebookMessenger.Postback{}
