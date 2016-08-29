@@ -40,7 +40,7 @@ defmodule FacebookMessenger.Message do
     seq: integer,
     text: String.t,
     attachments: [FacebookMessenger.Attachment.t],
-    quick_replies: [FacebookMessenger.Quickreply.t]
+    quick_replies: [FacebookMessenger.QuickReply.t]
   }
 end
 
@@ -102,7 +102,7 @@ defmodule FacebookMessenger.Messaging do
   Facebook messaging structure, contains the sender, recepient and message info
   """
   @derive [Poison.Encoder]
-  defstruct [:sender, :recipient, :timestamp, :message, :optin, :postback, :account_linking]
+  defstruct [:sender, :recipient, :timestamp, :message, :optin, :postback, :account_linking, :quick_reply]
 
   @type t :: %FacebookMessenger.Messaging{
     sender: FacebookMessenger.User.t,
@@ -111,7 +111,8 @@ defmodule FacebookMessenger.Messaging do
     message: FacebookMessenger.Message.t,
     optin: FacebookMessenger.Optin.t,
     postback: FacebookMessenger.Postback.t,
-    account_linking: FacebookMessenger.AccountLinking.t
+    account_linking: FacebookMessenger.AccountLinking.t,
+    quick_reply: FacebookMessenger.QuickReply.t
   }
 end
 
@@ -198,7 +199,8 @@ defmodule FacebookMessenger.Response do
       },
       "optin": %FacebookMessenger.Optin{},
       "postback": %FacebookMessenger.Postback{},
-      "account_linking": %FacebookMessenger.AccountLinking{}
+      "account_linking": %FacebookMessenger.AccountLinking{},
+      "quick_reply": %FacebookMessenger.QuickReply{}
     }
     %FacebookMessenger.Response{
       "entry": [%FacebookMessenger.Entry{
