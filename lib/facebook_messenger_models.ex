@@ -83,12 +83,26 @@ defmodule FacebookMessenger.Postback do
     }
 end
 
+defmodule FacebookMessenger.AccountLinking do
+  @moduledoc """
+  Account linking structure
+  """
+
+  @derive [Poison.Encoder]
+  defstruct [:authorization_code, :status]
+
+  @type t :: %FacebookMessenger.AccountLinking{
+    authorization_code: String.t,
+    status: String.t
+  }
+end
+
 defmodule FacebookMessenger.Messaging do
   @moduledoc """
   Facebook messaging structure, contains the sender, recepient and message info
   """
   @derive [Poison.Encoder]
-  defstruct [:sender, :recipient, :timestamp, :message, :optin, :postback]
+  defstruct [:sender, :recipient, :timestamp, :message, :optin, :postback, :account_linking]
 
   @type t :: %FacebookMessenger.Messaging{
     sender: FacebookMessenger.User.t,
@@ -96,7 +110,8 @@ defmodule FacebookMessenger.Messaging do
     timestamp: integer,
     message: FacebookMessenger.Message.t,
     optin: FacebookMessenger.Optin.t,
-    postback: FacebookMessenger.Postback.t
+    postback: FacebookMessenger.Postback.t,
+    account_linking: FacebookMessenger.AccountLinking.t
   }
 end
 
@@ -182,7 +197,8 @@ defmodule FacebookMessenger.Response do
         "quick_replies": [%FacebookMessenger.QuickReply{}]
       },
       "optin": %FacebookMessenger.Optin{},
-      "postback": %FacebookMessenger.Postback{}
+      "postback": %FacebookMessenger.Postback{},
+      "account_linking": %FacebookMessenger.AccountLinking{}
     }
     %FacebookMessenger.Response{
       "entry": [%FacebookMessenger.Entry{
