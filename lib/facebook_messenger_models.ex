@@ -8,8 +8,57 @@ defmodule FacebookMessenger.Attachment do
   @type t :: %FacebookMessenger.Attachment{
     type: atom,
     title: String.t,
-    payload: %{},
+    payload: FacebookMessenger.Payload.t,
     url: String.t
+  }
+end
+
+defmodule FacebookMessenger.Payload do
+  @moduledoc """
+  Facebook message structures
+  """
+
+  @derive [Poison.Encoder]
+  defstruct [:template_type, :text, :buttons, :elements]
+
+  @type t :: %FacebookMessenger.Payload{
+    template_type: String.t,
+    text: String.t,
+    buttons: [ FacebookMessenger.Button ],
+    elements: [ FacebookMessenger.Element.t ]
+  }
+end
+
+defmodule FacebookMessenger.Element do
+  @moduledoc """
+  Facebook message structures
+  """
+
+  @derive [Poison.Encoder]
+  defstruct [:title, :item_url, :image_url, :subtitle, :buttons]
+
+  @type t :: %FacebookMessenger.Element{
+    title: String.t,
+    item_url: String.t,
+    image_url: String.t,
+    subtitle: String.t,
+    buttons: [ FacebookMessenger.Button.t ]
+  }
+end
+
+defmodule FacebookMessenger.Button do
+  @moduledoc """
+  Facebook message structures
+  """
+
+  @derive [Poison.Encoder]
+  defstruct [:type, :title, :url, :payload]
+
+  @type t :: %FacebookMessenger.Button{
+    type: String.t,
+    title: String.t,
+    url: String.t,
+    payload: String.t
   }
 end
 
@@ -23,7 +72,7 @@ defmodule FacebookMessenger.QuickReply do
   @type t :: %FacebookMessenger.QuickReply{
     content_type: String.t,
     title: String.t,
-    payload: %{}
+    payload: FacebookMessenger.Payload.t
   }
 end
 
