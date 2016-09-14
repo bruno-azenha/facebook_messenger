@@ -4,7 +4,7 @@ defmodule FacebookMessenger.Mixfile do
   def project do
     [app: :facebook_messenger,
      name: "ExFacebookMessenger",
-     source_url: "https://github.com/oarrabi/facebook_messenger",
+     source_url: "https://github.com/bruno-azenha/facebook_messenger",
      version: "0.3.0",
      docs: [ extras: ["README.md"] ],
      elixir: "~> 1.0",
@@ -37,7 +37,7 @@ defmodule FacebookMessenger.Mixfile do
          {:plug, "> 0.0.0"},
          {:inch_ex, "> 0.0.0", only: :docs},
          {:ex_doc, "~> 0.13", only: :dev},
-         {:earmark, "~> 0.1", only: :docs}]
+         {:earmark, "~> 1.0"}]
 
     if Mix.env == :test do
       [{:coverex, "~> 1.4.8", only: :test}, {:poison, "~> 2.1.0", override: true} | d]
@@ -54,7 +54,7 @@ defmodule FacebookMessenger.Mixfile do
 
   defp package do
     [ files: [ "lib", "mix.exs", "README.md",],
-      maintainers: [ "Omar Abdelhafith" ],
-      links: %{ "GitHub" => "https://github.com/oarrabi/facebook_messenger" } ]
+      maintainers: [ "Bruno Azenha" ],
+      links: %{ "GitHub" => "https://github.com/bruno-azenha/facebook_messenger" } ]
   end
 end
