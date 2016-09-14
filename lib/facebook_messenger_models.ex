@@ -147,12 +147,27 @@ defmodule FacebookMessenger.AccountLinking do
   }
 end
 
+defmodule FacebookMessenger.Delivery do
+  @moduledoc """
+  Delivery structure
+  """
+
+  @derive [Poison.Encoder]
+  defstruct [:mids, :watermark, :seq]
+
+  @type t :: %FacebookMessenger.Delivery{
+    mids: [ String.t ],
+    watermark: integer,
+    seq: integer
+  }
+end
+
 defmodule FacebookMessenger.Messaging do
   @moduledoc """
   Facebook messaging structure, contains the sender, recepient and message info
   """
   @derive [Poison.Encoder]
-  defstruct [:sender, :recipient, :timestamp, :message, :optin, :postback, :account_linking]
+  defstruct [:sender, :recipient, :timestamp, :message, :optin, :postback, :account_linking, :delivery]
 
   @type t :: %FacebookMessenger.Messaging{
     sender: FacebookMessenger.User.t,
@@ -162,6 +177,7 @@ defmodule FacebookMessenger.Messaging do
     optin: FacebookMessenger.Optin.t,
     postback: FacebookMessenger.Postback.t,
     account_linking: FacebookMessenger.AccountLinking.t,
+    delivery: FacebookMessenger.Delivery.t,
   }
 end
 
@@ -191,7 +207,6 @@ defmodule FacebookMessenger.Response do
   Decode a map into a `FacebookMessenger.Response`
   """
   @spec parse(map) :: FacebookMessenger.Response.t
-
   def parse(param) when is_map(param) do
     Poison.Decode.decode(param, as: decoding_map)
   end
@@ -236,6 +251,26 @@ defmodule FacebookMessenger.Response do
     |> Enum.map(&( &1 |> Map.get(:sender) |> Map.get(:id)))
   end
 
+  @doc """
+  Retruns a list of message optins from a `FacebookMessenger.Response`
+  """
+  @spec message_optins(FacebookMessenger.Response) :: [String.t]
+  def message_optins(%{entry: entries}) do
+    messaging =
+    Enum.flat_map(entries, &Map.get(&1, :messaging))
+    |> Enum.map(&( &1 |> Map.get(:optin)))
+  end
+
+  @doc """
+  Retruns a list of message deliveries from a `FacebookMessenger.Response`
+  """
+  @spec message_deliveries(FacebookMessenger.Response) :: [String.t]
+  def message_deliveries(%{entry: entries}) do
+    messaging =
+    Enum.flat_map(entries, &Map.get(&1, :messaging))
+    |> Enum.map(&( &1 |> Map.get(:delivery)))
+  end
+
 
   defp decoding_map do
      messaging_parser =
@@ -250,6 +285,7 @@ defmodule FacebookMessenger.Response do
       "optin": %FacebookMessenger.Optin{},
       "postback": %FacebookMessenger.Postback{},
       "account_linking": %FacebookMessenger.AccountLinking{},
+      "delivery": %FacebookMessenger.Delivery{},
     }
     %FacebookMessenger.Response{
       "entry": [%FacebookMessenger.Entry{
