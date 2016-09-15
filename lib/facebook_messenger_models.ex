@@ -309,3 +309,16 @@ defmodule FacebookMessenger.Response do
   }
 
 end
+
+defmodule FacebookMessenger.Request do
+  @moduledoc """
+  Facebook messaging structure to be sent on Send-API requests
+  """
+  @derive [Poison.Encoder]
+  defstruct [:recipient, :message]
+
+  @type t :: %FacebookMessenger.Request{
+    recipient: FacebookMessenger.User.t,
+    message: FacebookMessenger.Message.t
+  }
+end
