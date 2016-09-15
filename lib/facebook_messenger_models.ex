@@ -242,19 +242,19 @@ defmodule FacebookMessenger.Response do
   end
 
   @doc """
-  Returns a list of message sender Ids from a `FacebookMessenger.Response`
+  Returns a list of message recipients from a `FacebookMessenger.Response`
   """
-  @spec message_senders(FacebookMessenger.Response) :: [String.t]
+  @spec message_senders(FacebookMessenger.Response) :: [FacebookMessenger.User.t]
   def message_senders(%{entry: entries}) do
     messaging =
     Enum.flat_map(entries, &Map.get(&1, :messaging))
-    |> Enum.map(&( &1 |> Map.get(:sender) |> Map.get(:id)))
+    |> Enum.map(&( &1 |> Map.get(:sender)))
   end
 
   @doc """
   Returns a list of message optins from a `FacebookMessenger.Response`
   """
-  @spec message_optins(FacebookMessenger.Response) :: [String.t]
+  @spec message_optins(FacebookMessenger.Response) :: [FacebookMessenger.Optin.t]
   def message_optins(%{entry: entries}) do
     messaging =
     Enum.flat_map(entries, &Map.get(&1, :messaging))
@@ -264,7 +264,7 @@ defmodule FacebookMessenger.Response do
   @doc """
   Returns a list of message deliveries from a `FacebookMessenger.Response`
   """
-  @spec message_deliveries(FacebookMessenger.Response) :: [String.t]
+  @spec message_deliveries(FacebookMessenger.Response) :: [FacebookMessenger.Delivery.t]
   def message_deliveries(%{entry: entries}) do
     messaging =
     Enum.flat_map(entries, &Map.get(&1, :messaging))
@@ -274,7 +274,7 @@ defmodule FacebookMessenger.Response do
   @doc """
   Returns a list of message postbacks from a `FacebookMessenger.Response`
   """
-  @spec message_postbacks(FacebookMessenger.Response) :: [String.t]
+  @spec message_postbacks(FacebookMessenger.Response) :: [FacebookMessenger.Postback.t]
   def message_postbacks(%{entry: entries}) do
     messaging =
     Enum.flat_map(entries, &Map.get(&1, :messaging))
