@@ -281,6 +281,16 @@ defmodule FacebookMessenger.Response do
     |> Enum.map(&( &1 |> Map.get(:postback)))
   end
 
+  @doc """
+  Returns a list of message postbacks from a `FacebookMessenger.Response`
+  """
+  @spec message_postbacks_text(FacebookMessenger.Response) :: [String.t]
+  def message_postbacks(%{entry: entries}) do
+    messaging =
+    Enum.flat_map(entries, &Map.get(&1, :messaging))
+    |> Enum.map(&( &1 |> Map.get(:postback) |> Map.get(:payload)))
+  end
+
 
   defp decoding_map do
      messaging_parser =
