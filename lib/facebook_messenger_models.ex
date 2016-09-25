@@ -243,6 +243,18 @@ defmodule FacebookMessenger.Response do
   end
 
   @doc """
+  Return a list of attachment_payloads from a `FacebookMessenger.Response`
+  """
+  @spec message_attachment_payloads(FacebookMessenger.Response) :: [FacebookMessenger.Payload.t]
+  def message_attachment_payloads(%{entry: entries}) do
+    messaging =
+    Enum.flat_map(entries, &Map.get(&1, :messaging))
+    |> Enum.map(&(&1 |> Map.get(:message)))
+    |> Enum.flat_map(&Map.get(&1, :attachments) |> Map.get(:payload))
+  end
+
+
+  @doc """
   Returns a list of message recipients from a `FacebookMessenger.Response`
   """
   @spec message_senders(FacebookMessenger.Response) :: [FacebookMessenger.User.t]
