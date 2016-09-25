@@ -19,10 +19,11 @@ defmodule FacebookMessenger.Payload do
   """
 
   @derive [Poison.Encoder]
-  defstruct [:template_type, :text, :buttons, :elements]
+  defstruct [:template_type, :text, :url, :buttons, :elements]
 
   @type t :: %FacebookMessenger.Payload{
     template_type: String.t,
+    url: String.t,
     text: String.t,
     buttons: [ FacebookMessenger.Button ],
     elements: [ FacebookMessenger.Element.t ]
